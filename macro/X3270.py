@@ -199,12 +199,18 @@ class X3270():
     def get_sdh_row(self,job=None,row=None):
         job = job if job else self._job_info
         row = row if row else self.jcl_param.get('row_detail',1)
+        print(job)
         print(self.jcl_param.get('row_detail',1))
         try:
             rows = subprocess.Popen("x3270if -t "+ str(self.port) +" 'ascii()'|grep -n -m2 "+job+"|cut -d \":\" -f1",shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT).communicate()
             print("%s ascii Success" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
             # row = int(rows[0])-1
-            row_list =[ x for x in [ int(i)-1 for i in rows[0] if i.isdigit() ] if x > 0 ]
+            # row_list =[ x for x in [ int(i)-1 for i in rows[0] if i.replace('\n','').isdigit() ] if x > 0 ]
+            row_list = []
+            for r in rows[0].split('\n'):
+                if r.isdigit():
+                    row_list.append(int(r)-1)
+            
             self._result = row_list[row-1]
             print (row_list)
             print (row_list[row-1])
