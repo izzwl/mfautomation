@@ -39,7 +39,7 @@ f = open(outlist, "r")
 s = 0
 lines = f.readlines()
 for i,l in enumerate(lines):
-    if i > 6:
+    if i > 4:
         col = 0
         ws.write(row, col+0, l[1:6].strip(), font_style)
         ws.write(row, col+1, l[6:16].strip(), font_style)
