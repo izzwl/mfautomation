@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=MF PYTHON MACRO
+Comment=
+Exec=/usr/bin/xfce4-terminal --default-working-directory=/home/umc180006/mfautomation --default-working-directory=/home/umc180006/mfautomation/macro
+Icon=utilities-terminal
+Path=~/mfautomation
+Terminal=true
+StartupNotify=false

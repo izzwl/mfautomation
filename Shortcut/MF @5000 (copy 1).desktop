@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Hercules @6000
+Comment=
+Exec=x3270 -reconnect -scriptport 6000 172.16.0.18:23
+Icon=utilities-terminal
+Path=
+Terminal=false
+StartupNotify=false

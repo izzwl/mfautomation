@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=MF @5000
+Comment=
+Exec=x3270 -reconnect -scriptport 5000 9.67.174.1:7490
+Icon=utilities-terminal
+Path=
+Terminal=false
+StartupNotify=false
