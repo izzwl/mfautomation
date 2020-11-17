@@ -141,7 +141,7 @@ class X3270():
     
     def s_juser(self):
         if self.host == 'hercules':
-            return self.string(self.tso_user + "                    ")
+            return self.string(self.tso_user + "                   ")
         elif self.host == 'mainframe':
             return self.string(self.tso_user)
     
