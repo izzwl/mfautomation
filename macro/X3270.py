@@ -101,7 +101,7 @@ class X3270():
     def transfer(self,filename=None):
         filename = filename or self.filename
         try:
-            subprocess.Popen("x3270if -t "+ str(self.port) +" \"transfer(hostfile=mpmcs99.transfer,localfile="+filename+",exist=replace)\" ; wait",shell=True).wait()
+            subprocess.Popen("x3270if -t "+ str(self.port) +" \"transfer(hostfile="+ self.tso_user +".transfer,localfile="+filename+",exist=replace)\" ; wait",shell=True).wait()
             print("%s Transfer %s Success" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),str(filename)))
             return self
         except Exception as e:
