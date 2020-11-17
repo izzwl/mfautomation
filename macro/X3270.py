@@ -28,7 +28,7 @@ class X3270():
             'MPMCS99':'',
             'MPMCS98':'',
             'MPMCS32':'bismilah',
-        }.get(tso_user,'')
+        }.get(self.tso_user.upper(),'')
     
     def set_param(self,jcl_class, jcl_user, jcl_param, detail):
         self.jcl_class = jcl_class
@@ -279,7 +279,7 @@ class X3270():
         jcl_param = self.jcl_param
         detail = self.detail
         mf = self.cek_konek()
-        mf = mf.s_tso().enter().string(self.tso_pass).enter().sleep(10).enter().enter().enter().cek_logon()
+        mf = mf.s_tso().enter().sleep(5).string(self.tso_pass).enter().sleep(10).enter().enter().enter().cek_logon()
         mf = mf.s_p2().enter().tab().s_jcl().enter().s_res().enter()
         mf = mf.movecursor(*jcl_class['xy']).s_user().string(jcl_class['val'])
         mf = mf.movecursor(*jcl_user['xy']).s_juser()
