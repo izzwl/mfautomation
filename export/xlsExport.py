@@ -5,7 +5,7 @@ import decimal
 
 class xlsExport(object):
     MFOUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
-    MFXLS_DIR = os.path.join(os.path.expanduser("~"),'mfxls')
+    MFXLS_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
     outlist = ''
     filename = ''
     header = []
@@ -64,17 +64,21 @@ class xlsExport(object):
                     if col < len(self.popotongan) - 1:
                         style = self.font_style
                         data = l[p:self.popotongan[col+1]].strip()
-                        if col in self.date_col0:
-                            data = datetime.datetime.strptime(data,"%d%b%y") if data else ''
-                            style = self.date_style
-                        if col in self.num_col0:
-                            data = data.replace(',','')
-                            if data == '' :
-                                data = decimal.Decimal(0) 
-                            else:
-                                data = decimal.Decimal(data) 
-                            style = self.num_style
+                        try:
+                            if col in self.date_col0:
+                                data = datetime.datetime.strptime(data,"%d%b%y") if data else ''
+                                style = self.date_style
+                            if col in self.num_col0:
+                                data = data.replace(',','')
+                                if data == '' :
+                                    data = decimal.Decimal(0) 
+                                else:
+                                    data = decimal.Decimal(data) 
+                                style = self.num_style
+                        except Exception as e:
+                            print(e)
                         self.ws.write(row, col, data ,style) 
+                        # print(data)
                 row += 1
 
     def export(self):

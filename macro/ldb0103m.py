@@ -1,3 +1,4 @@
+import argparse
 import datetime
 import subprocess,sys
 import os
@@ -13,17 +14,24 @@ to run this script well, tso must meet the following condition:
 ...continue
 
 """
+parser = argparse.ArgumentParser()
+parser.add_argument('--mf', help='mf instance')
+parser.add_argument('--param', help='201001 201031')
+parser.add_argument('--user', help='MPMCS32')
+parser.add_argument('--output', help='output file name')
+args = parser.parse_args()
+
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
 # outlist name
-FILE        = os.path.join(OUTLIST_DIR,'BCOUTBC3')
+FILE        = os.path.join(OUTLIST_DIR,'LDB0103M')
 
 # jcl mainframe name
-JCL         = "IMSVS.PROD.BMP(BCOUTBC3)"
+JCL         = "IMSVS.PROD.BMP(LDB0103M)"
 
 # tso user, must be logged off
-TSO_USER    = "MPMCS99"
+TSO_USER    = args.user or "MPMCS32"
 
 # sub name of outlist on sd.h ex. JOBXXX>DETAIL
 # ex DETAIL = ['NON UMC']
@@ -34,31 +42,21 @@ _mf_ibm     = X3270.X3270('mainframe','5000',TSO_USER,FILE,JCL)
 _mf_hrc     = X3270.X3270('hercules','6000',TSO_USER,FILE,JCL)
 # select to be used
 try: 
-    mf = { 'ibm':_mf_ibm,'hrc':_mf_hrc }.get( sys.argv[1], _mf_ibm )
+    mf = { 'ibm':_mf_ibm,'hrc':_mf_hrc }.get( args.mf, _mf_ibm )
 except:    
     mf = _mf_ibm
 
+
 #calculate param for jcl
-begin       = datetime.datetime.now()
-end         = datetime.datetime.now()
-_ed         = end.strftime("%-d")
-_ew         = end.strftime("%w")
+param       = "%s" % (args.param) if args.param else ''
 
-if _ed == '1' or ( _ed in ['2','3'] and _ew == '1' ):
-    begin = begin + datetime.timedelta(days=-31)
-elif _ew == '1':
-    begin = begin + datetime.timedelta(days=-16)
-else:
-    begin = begin + datetime.timedelta(days=-14)
-
-param       = "%s %s" % (begin.strftime("%y%m%d"),end.strftime("%y%m%d"))
 
 #for movecursor to MPMCS99I section and set it
-jcl_class   = { 'xy' : [5,10], 'val' : 'V', }
+jcl_class   = { 'xy' : [5,10], 'val' : 'L', }
 #for movecursor to user=MPMCS99 section
 jcl_user    = { 'xy' : [7,26], }
 #for movecursor to jcl parameter section
-jcl_param   = { 'xy' : [20,8], 'val' : param, }
+jcl_param   = { 'xy' : [22,8], 'val' : param }
 
 # #run by passing these parameter
 # mf = mf.handle(jcl_class, jcl_user, jcl_param, DETAIL)

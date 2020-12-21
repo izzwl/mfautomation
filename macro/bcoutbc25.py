@@ -17,7 +17,7 @@ to run this script well, tso must meet the following condition:
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
 # outlist name
-FILE        = os.path.join(OUTLIST_DIR,'BCOUTBC2')
+FILE        = os.path.join(OUTLIST_DIR,'BCOUTBC25')
 
 # jcl mainframe name
 JCL         = "IMSVS.PROD.BMP(BCOUTBC2)"
@@ -44,10 +44,12 @@ end         = datetime.datetime.now()
 _ed         = end.strftime("%-d")
 _ew         = end.strftime("%w")
 
-if _ew == '1':
-    begin = begin + datetime.timedelta(days=-3)
+if _ed == '1' or ( _ed in ['2','3'] and _ew == '1' ):
+    begin = begin + datetime.timedelta(days=-31)
+elif _ew == '1':
+    begin = begin + datetime.timedelta(days=-16)
 else:
-    begin = begin + datetime.timedelta(days=-1)
+    begin = begin + datetime.timedelta(days=-14)
 
 param       = "%s %s" % (begin.strftime("%y%m%d"),end.strftime("%y%m%d"))
 

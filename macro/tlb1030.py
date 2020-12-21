@@ -19,6 +19,7 @@ parser.add_argument('--mf', help='mf instance')
 parser.add_argument('--param', help='wip select')
 parser.add_argument('--user', help='MPMCS32')
 parser.add_argument('--output', help='output file name')
+parser.add_argument('--runxls', help='run macro xls [y]')
 args = parser.parse_args()
 
 # default directory to keep outlist
@@ -36,6 +37,8 @@ TSO_USER    = args.user or "MPMCS32"
 # sub name of outlist on sd.h ex. JOBXXX>DETAIL
 # ex DETAIL = ['NON UMC']
 DETAIL      = []
+
+runxls = args.runxls or ''
 
 # script instantiation
 _mf_ibm     = X3270.X3270('mainframe','5000',TSO_USER,FILE,JCL)
@@ -63,3 +66,10 @@ jcl_param   = { 'xy' : [18,8], 'val' : param }
 args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
+
+if runxls.lower() == 'y':
+    os.chdir('..')
+    os.chdir('export')
+    # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+    sys.argv = [sys.argv[0]]
+    execfile(__file__)

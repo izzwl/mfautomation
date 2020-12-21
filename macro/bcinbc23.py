@@ -44,10 +44,12 @@ end         = datetime.datetime.now()
 _ed         = end.strftime("%-d")
 _ew         = end.strftime("%w")
 
-if _ew == '1':
-    begin = begin + datetime.timedelta(days=-3)
+if _ed == '1' or ( _ed in ['2','3'] and _ew == '1' ):
+    begin = begin + datetime.timedelta(days=-31)
+elif _ew == '1':
+    begin = begin + datetime.timedelta(days=-16)
 else:
-    begin = begin + datetime.timedelta(days=-1)
+    begin = begin + datetime.timedelta(days=-14)
 
 param       = "%s %s" % (begin.strftime("%y%m%d"),end.strftime("%y%m%d"))
 

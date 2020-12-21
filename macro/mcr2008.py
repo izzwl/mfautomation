@@ -27,7 +27,7 @@ OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 FILE        = os.path.join(OUTLIST_DIR,'MCR2008')
 
 # jcl mainframe name
-JCL         = "IMSVS.PROD.BMP.AUTO(MCR2008)"
+JCL         = "IMSVS.PROD.BMP(MCR2008)"
 
 # tso user, must be logged off
 TSO_USER    = "MPMCS99"
