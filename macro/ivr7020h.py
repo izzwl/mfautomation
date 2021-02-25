@@ -16,7 +16,7 @@ to run this script well, tso must meet the following condition:
 """
 parser = argparse.ArgumentParser()
 parser.add_argument('--mf', help='mf instance')
-parser.add_argument('--param', help='O POYYYYY POZZZZZ X')
+parser.add_argument('--param', help='O POYYYYYY POZZZZZZ X')
 parser.add_argument('--user', help='MPMCS32')
 parser.add_argument('--output', help='output file name')
 parser.add_argument('--runxls', help='run macro xls [y]')
