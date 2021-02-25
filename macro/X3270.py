@@ -18,7 +18,7 @@ class X3270():
     detail = ''
     scroll = 0
 
-    def __init__(self,host,port,tso_user,filename,jcl):
+    def __init__(self,host,port,tso_user='',filename=None,jcl=None):
         self.host = host
         self.port = str(port)
         self.tso_user = tso_user

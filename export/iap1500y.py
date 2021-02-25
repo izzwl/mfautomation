@@ -7,8 +7,8 @@ parser.add_argument('--input', help='input file select - must be on ~/mfoutlist'
 parser.add_argument('--output', help='output file name ~/mfxls')
 args = parser.parse_args()
 
-outlist = args.input if args.input else 'IAP1500'
-filename = args.output if args.output else 'IAP1500.xls'
+outlist = args.input if args.input else 'IAP1500-Y'
+filename = args.output if args.output else 'IAP1500-Y.xls'
 
 export = xlsExport(outlist,filename)
 export.set_header([
