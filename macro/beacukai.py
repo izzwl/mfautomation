@@ -16,7 +16,7 @@ to run this script well, tso must meet the following condition:
 """
 parser = argparse.ArgumentParser()
 parser.add_argument('--mf', help='mf instance')
-parser.add_argument('--param', help='wip select')
+parser.add_argument('--param', help='455455')
 parser.add_argument('--user', help='MPMCS32')
 parser.add_argument('--output', help='output file name')
 parser.add_argument('--runxls', help='run macro xls [y]')
@@ -26,10 +26,10 @@ args = parser.parse_args()
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
 # outlist name
-FILE        = os.path.join(OUTLIST_DIR,'IVR4025M')
+FILE        = os.path.join(OUTLIST_DIR,'BEACUKAI')
 
 # jcl mainframe name
-JCL         = "IMSVS.PROD.BMP.RUTIN(IVR4025M)"
+JCL         = "IMSVS.PROD.BMP(BEACUKAI)"
 
 # tso user, must be logged off
 TSO_USER    = args.user or "MPMCS32"
@@ -59,7 +59,7 @@ jcl_class   = { 'xy' : [5,10], 'val' : 'I', }
 #for movecursor to user=MPMCS99 section
 jcl_user    = { 'xy' : [6,57], }
 #for movecursor to jcl parameter section
-jcl_param   = { 'xy' : [23,8], 'val' : param }
+jcl_param   = { 'xy' : [6,8], 'val' : param, 'scroll' : 1 }
 
 # #run by passing these parameter
 # mf = mf.handle(jcl_class, jcl_user, jcl_param, DETAIL)

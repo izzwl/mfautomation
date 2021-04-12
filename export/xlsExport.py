@@ -12,7 +12,11 @@ class xlsExport(object):
     firstlinedata = 0
     popotongan = []
     date_col0 = []
+    text_col0 = []
     num_col0 = []
+    date_format = [
+        "%d%b%y","%y%m%d","%d %b %y","%d%m%y"
+    ]
     wb = xlwt.Workbook(encoding='utf-8',style_compression=2)
     ws = wb.add_sheet('Sheet 1')
     date_style = xlwt.easyxf(num_format_str="D-MMM-YY")
@@ -40,8 +44,14 @@ class xlsExport(object):
     def set_popotongan(self,popotongan):
         self.popotongan = popotongan
 
+    def set_date_format(self,date_format=[]):
+        self.date_format = date_format
+    
     def set_date_col0(self,date_col0):
         self.date_col0 = date_col0
+    
+    def set_text_col0(self,text_col0):
+        self.text_col0 = text_col0
 
     def set_num_col0(self,num_col0):
         self.num_col0 = num_col0
@@ -66,8 +76,15 @@ class xlsExport(object):
                         data = l[p:self.popotongan[col+1]].strip()
                         try:
                             if col in self.date_col0:
-                                data = datetime.datetime.strptime(data,"%d%b%y") if data else ''
+                                for df in self.date_format:
+                                    try:
+                                        data = datetime.datetime.strptime(data,df) if data else ''
+                                        break
+                                    except:
+                                        pass
                                 style = self.date_style
+                            if col in self.text_col0:
+                                data = str(data)
                             if col in self.num_col0:
                                 data = data.replace(',','')
                                 if data == '' :
@@ -77,7 +94,18 @@ class xlsExport(object):
                                 style = self.num_style
                         except Exception as e:
                             print(e)
-                        self.ws.write(row, col, data ,style) 
+                        cobalagi = 0
+                        try:
+                            self.ws.write(row, col, data ,style) 
+                            cobalagi = 0
+                        except:
+                            cobalagi = 1
+                        if cobalagi:
+                            try:
+                                self.ws.write(row, col, data.decode('utf8') ,style) 
+                                cobalagi = 0
+                            except:
+                                cobalagi = 1     
                         # print(data)
                 row += 1
 

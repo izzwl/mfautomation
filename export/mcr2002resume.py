@@ -1,5 +1,7 @@
 import argparse
-import os
+import os,sys
+sys.path.insert(0,'..')
+sys.path.insert(0,'.')
 from xlsExport import xlsExport
 
 parser = argparse.ArgumentParser()
@@ -7,19 +9,17 @@ parser.add_argument('--input', help='input file select - must be on ~/mfoutlist'
 parser.add_argument('--output', help='output file name ~/mfxls')
 args = parser.parse_args()
 
-outlist = args.input if args.input else 'IAP1500-Y'
-filename = args.output if args.output else 'IAP1500-Y.xls'
+outlist = args.input if args.input else 'MCR2002-RESUME'
+filename = args.output if args.output else 'MCR2002-RESUME.xls'
 
 export = xlsExport(outlist,filename)
 export.set_header([
-    'SNDI','NAMA-SANDI','JENIS','F-SENTRAL','SBU/CC','ANGGARAN-AWAL',
-    'REALISASI-ANGGARAN','PLAFOND-BUDGET','PLAFOND-PR','REALISASI-PR',
-    'PLAFOND-PO','REALISASI-PO','ANGGARAN-AKHIR',
+    'K-ORG','NIK','NAMA','REKENING','JUMLAH',
 ])
 export.set_firstlinedata(0)
 export.set_popotongan([
-    1,6,33,45,55,61,85,108,131,155,179,203,227,251,
+    1,8,15,46,62,73,
 ])
 export.set_date_col0([])
-export.set_num_col0([5,6,7,8,9,10,11,12])
+export.set_num_col0([4])
 export.export()

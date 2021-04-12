@@ -272,7 +272,11 @@ class X3270():
             mf = mf.pf(3)
         mf = mf.movecursor(23,20)
         return mf
-
+    
+    def screen(self):
+        layar = subprocess.Popen("x3270if -t "+ str(self.port) +" 'ascii()'",shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT).communicate()
+        return layar
+    
     def handle(self):
         jcl_class = self.jcl_class
         jcl_user = self.jcl_user
