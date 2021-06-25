@@ -17,6 +17,7 @@ class xlsExport(object):
     date_format = [
         "%d%b%y","%y%m%d","%d %b %y","%d%m%y"
     ]
+    pivot_year = 1969
     wb = xlwt.Workbook(encoding='utf-8',style_compression=2)
     ws = wb.add_sheet('Sheet 1')
     date_style = xlwt.easyxf(num_format_str="D-MMM-YY")
@@ -28,6 +29,9 @@ class xlsExport(object):
     def __init__(self,outlist,filename):
         self.outlist = os.path.join(self.MFOUTLIST_DIR,outlist)
         self.filename = filename
+
+    def set_pivot_year(self,pivot_year):
+        self.pivot_year = pivot_year
 
     def set_mfoutlistdir(self,directory):
         self.MFOUTLIST_DIR = directory
@@ -82,6 +86,15 @@ class xlsExport(object):
                                         break
                                     except:
                                         pass
+                                    
+                                try:
+                                    if data.year > (self.pivot_year+100):
+                                        # print(self.pivot_year)
+                                        # data = data.replace(year=data.year-100)
+                                        data = datetime.datetime(data.year-100,data.month,data.day)
+                                except:
+                                    pass
+                            
                                 style = self.date_style
                             if col in self.text_col0:
                                 data = str(data)

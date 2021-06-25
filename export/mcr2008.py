@@ -15,6 +15,7 @@ filename = args.output if args.output else 'MCR2008.xls'
 export = xlsExport(outlist,filename)
 export.set_header(['NO.','KDORG','DESCRIPTION','NIK','NAMA','JOB-CD','','RUMPUN','JOB-TITLE','STS-JOB','JENIS','TMT','GR','IN','F','J','S','J','H','P','DESCRIPTION','K','A','GL','MK','M','C','LAHIR','TMT-UMC','TMTKGG','TMT-CB','TMT-IPTN','TEMPAT-LAHIR','DARAH','NIK-1','NAMA-1','ORG-1','NIK-2','NAMA-2','ORG-2','TMT-GRD','NOMOR-KTP','NO-PASPOR','EXP-DTE','NO-NPWP','NO-ASTEK'])
 export.set_firstlinedata(0)
+export.set_pivot_year(1950)
 export.set_popotongan([1, 6, 12, 38, 45, 76, 83, 86, 107, 138, 146, 153, 161, 164, 167, 169, 171, 173, 175, 177, 180, 201, 203, 205, 207, 211, 213, 215, 224, 232, 240, 248, 259, 281, 287, 294, 325, 331, 338, 369, 375, 383, 400, 410, 418, 439, 452])
 export.set_date_col0([11,27,28,29,30,31,40,43])
 export.set_num_col0([])

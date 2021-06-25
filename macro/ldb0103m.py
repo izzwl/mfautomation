@@ -25,7 +25,7 @@ args = parser.parse_args()
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
 # outlist name
-FILE        = os.path.join(OUTLIST_DIR,'LDB0103M')
+FILE        = os.path.join(OUTLIST_DIR,args.output or 'LDB0103M')
 
 # jcl mainframe name
 JCL         = "IMSVS.PROD.BMP(LDB0103M)"
