@@ -26,7 +26,7 @@ args = parser.parse_args()
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
 # outlist name
-FILE        = os.path.join(OUTLIST_DIR,'PPB1300A')
+FILE        = os.path.join(OUTLIST_DIR,'PPB1300A-'+args.param)
 
 # jcl mainframe name
 JCL         = "IMSVS.PROD.BMP.AUTO(PPB1300A)"
@@ -68,9 +68,10 @@ args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
 
-if runxls.lower() == 'y':
-    os.chdir('..')
-    os.chdir('export')
-    # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
-    sys.argv = [sys.argv[0]]
-    execfile(__file__)
+# if runxls.lower() == 'y':
+os.chdir('..')
+os.chdir('export')
+# sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+sys.argv = ['','--input=PPB1300A-'+param,'--output=PPB1300A-'+param+'.xls']
+# sys.argv = [sys.argv[0]]
+execfile(__file__)

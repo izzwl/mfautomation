@@ -1,5 +1,7 @@
 import argparse
-import os
+import os,sys
+sys.path.insert(0,'..')
+sys.path.insert(0,'.')
 from xlsExport import xlsExport
 
 parser = argparse.ArgumentParser()

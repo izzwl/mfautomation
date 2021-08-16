@@ -6,7 +6,7 @@ MFOUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 SRC = 'IVR8020'
 DST = 'IVR8020-NEW'
 print(sys.getrecursionlimit())
-sys.setrecursionlimit(30000)
+sys.setrecursionlimit(90000)
 
 nf = open(os.path.join(MFOUTLIST_DIR,DST), "w+") 
 f = open(os.path.join(MFOUTLIST_DIR,SRC), "r")

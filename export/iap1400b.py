@@ -12,7 +12,7 @@ filename = args.output if args.output else 'IAP1400B.xls'
 
 export = xlsExport(outlist,filename)
 export.set_header([
-    'JENIS','NO-PENR.','CREATED','NIK','SBU','SANDI','PG','INVOICE#','CUSTOMER','NOMOR-REF.','TANGGAL','NO-REK-UMC','NAMA-BANK','MTU','TOTAL-BAYAR','REMARK'
+    'JENIS','NO-PENR.','CREATED','NIK','SBU','SANDI','PG','INVOICE#','CUSTOMER CODE','CUSTOMER','NOMOR-REF.','TANGGAL','NO-REK-UMC','NAMA-BANK','MTU','TOTAL-BAYAR','REMARK'
 ])
 export.set_firstlinedata(5)
 export.set_popotongan([

@@ -17,7 +17,7 @@ to run this script well, tso must meet the following condition:
 parser = argparse.ArgumentParser()
 parser.add_argument('--mf', help='mf instance')
 parser.add_argument('--param', help='455455')
-parser.add_argument('--user', help='MPMCS32')
+# parser.add_argument('--user', help='MPMCS32')
 parser.add_argument('--output', help='output file name')
 parser.add_argument('--runxls', help='run macro xls [y]')
 args = parser.parse_args()
@@ -25,14 +25,20 @@ args = parser.parse_args()
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
+_param = args.param.replace(' ','_')
+is_runxls = args.runxls and args.runxls.lower() == 'y'
 # outlist name
-FILE        = os.path.join(OUTLIST_DIR,'IVR4025')
+if is_runxls:
+    FILE        = os.path.join(OUTLIST_DIR,'IVR4025-'+_param)
+else:
+    FILE        = os.path.join(OUTLIST_DIR,'IVR4025')
 
 # jcl mainframe name
 JCL         = "IMSVS.PROD.BMP(IVR4025)"
 
 # tso user, must be logged off
-TSO_USER    = args.user or "MPMCS32"
+# TSO_USER    = args.user or "MPMCS99"
+TSO_USER    = "MPMCS99"
 
 # sub name of outlist on sd.h ex. JOBXXX>DETAIL
 # ex DETAIL = ['NON UMC']
@@ -67,9 +73,17 @@ args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
 
-if runxls.lower() == 'y':
+# if runxls.lower() == 'y':
+#     os.chdir('..')
+#     os.chdir('export')
+#     # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+#     sys.argv = [sys.argv[0]]
+#     execfile(__file__)
+
+if is_runxls:
     os.chdir('..')
     os.chdir('export')
     # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
-    sys.argv = [sys.argv[0]]
+    sys.argv = ['','--input=IVR4025-'+_param,'--output=IVR4025-'+_param+'.xls']
+    # sys.argv = [sys.argv[0]]
     execfile(__file__)

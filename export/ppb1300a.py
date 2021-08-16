@@ -1,6 +1,8 @@
 import argparse
 import datetime
-import os
+import os,sys
+sys.path.insert(0,'..')
+sys.path.insert(0,'.')
 import xlwt
 
 parser = argparse.ArgumentParser()
@@ -9,9 +11,10 @@ parser.add_argument('--output', help='output file name ~/mfxls')
 args = parser.parse_args()
 
 MFOUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
-MFXLS_DIR = os.path.join(os.path.expanduser("~"),'mfxls')
+# MFXLS_DIR = os.path.join(os.path.expanduser("~"),'mfxls')
+MFXLS_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 outlist = os.path.join(MFOUTLIST_DIR,'%s'%(args.input if args.input else 'PPB1300A' ))
-filename = "%s.xls"%(args.output if args.output else 'PPB1300A' )
+filename = "%s"%(args.output if args.output else 'PPB1300A' )
 
 wb = xlwt.Workbook(encoding='utf-8',style_compression=2)
 ws = wb.add_sheet('Sheet 1')

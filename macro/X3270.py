@@ -15,8 +15,10 @@ class X3270():
     jcl_class = ''
     jcl_user = ''
     jcl_param = ''
+    jcl_param_list = []
     detail = ''
     scroll = 0
+    has_xdc = True
 
     def __init__(self,host,port,tso_user='',filename=None,jcl=None):
         self.host = host
@@ -36,6 +38,9 @@ class X3270():
         self.jcl_param = jcl_param
         self.detail = detail
 
+    def set_jcl_param_list(self,jcl_param_list):
+        self.jcl_param_list = jcl_param_list
+        
     def conv_date(self,date):
         command = "date -d "+date+" +%Y-%m-%d"
         if date:
@@ -96,6 +101,16 @@ class X3270():
             return self
         except Exception as e:
             print("%s Movecursor %s,%s Failed : %s" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),str(r),str(c),str(e)))
+            return sys.exit("GAGAL")
+
+    def transfer_kosong(self,filename=None):
+        filename = filename or self.filename
+        try:
+            subprocess.Popen("x3270if -t "+ str(self.port) +" \"transfer(hostfile=kosong.transfer,localfile="+filename+",exist=replace)\" ; wait",shell=True).wait()
+            print("%s Transfer %s Success" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),str(filename)))
+            return self
+        except Exception as e:
+            print("%s Transfer %s Failed : %s" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),str(filename),str(e)))
             return sys.exit("GAGAL")
 
     def transfer(self,filename=None):
@@ -256,20 +271,23 @@ class X3270():
             return sys.exit(result[0])
 
     
-    
     def xdc(self):
         detail = self.detail
         mf = self.enter().enter().pf(3).pf(3).pf(3).s_sdh().enter()
         row = self.get_sdh_row()
         mf = mf.movecursor(row,1)
-        for d in detail:
-            print(d)
-            mf = mf.string("?").enter()
-            row = self.get_sdh_row(d,1)
-            mf = mf.movecursor(row,1)
-        mf = mf.string('XDC').enter().enter()
-        for d in detail:
+        try:
+            for d in detail:
+                print(d)
+                mf = mf.string("?").enter()
+                row = self.get_sdh_row(d,1)
+                mf = mf.movecursor(row,1)
+            mf = mf.string('XDC').enter().enter()
+            for d in detail:
+                mf = mf.pf(3)
+        except:
             mf = mf.pf(3)
+            mf.has_xdc = False
         mf = mf.movecursor(23,20)
         return mf
     
@@ -281,6 +299,7 @@ class X3270():
         jcl_class = self.jcl_class
         jcl_user = self.jcl_user
         jcl_param = self.jcl_param
+        jcl_param_list = self.jcl_param_list
         detail = self.detail
         mf = self.cek_konek()
         mf = mf.s_tso().enter().sleep(5).string(self.tso_pass).enter().sleep(10).enter().enter().enter().cek_logon()
@@ -291,11 +310,43 @@ class X3270():
         for i in range(0,jcl_param.get('scroll',0)):
             mf = mf.movecursor(3,14).pf(8)
         mf = mf.movecursor(*jcl_param['xy']).string(jcl_param['val'])
+        for jp in jcl_param_list:
+            mf = mf.movecursor(*jp['xy']).string(jp['val'])
         mf = mf.movecursor(3,14).s_sub().enter()
         mf = mf.job_info().wait_job().xdc()
         mf = mf.s_jclear().enter().enter().enter().pf(3).pf(3)
-        mf = mf.s_p2().enter().tab().s_data_transfer().enter()
-        mf = mf.s_res().enter().s_remove_hex().enter().pf(3).pf(3)
-        mf = mf.string("6").enter().transfer().pf(3).pf(3).pf(3)
+        
+        if mf.has_xdc:
+            mf = mf.s_p2().enter().tab().s_data_transfer().enter()
+            mf = mf.s_res().enter().s_remove_hex().enter().pf(3).pf(3)
+            mf = mf.string("6").enter().transfer().pf(3).pf(3).pf(3)
+        else:
+            mf = mf.string("P.6").enter().transfer_kosong().pf(3).pf(3).pf(3)
+        
         mf = mf.string("2").enter().string("logoff").enter().sleep(5)
         return "ALHAMDULILLAH"
+    
+    # def handle_2_line_param(self):
+    #     jcl_class = self.jcl_class
+    #     jcl_user = self.jcl_user
+    #     jcl_param = self.jcl_param
+    #     detail = self.detail
+    #     mf = self.cek_konek()
+    #     mf = mf.s_tso().enter().sleep(5).string(self.tso_pass).enter().sleep(10).enter().enter().enter().cek_logon()
+    #     mf = mf.s_p2().enter().tab().s_jcl().enter().s_res().enter()
+    #     mf = mf.movecursor(*jcl_class['xy']).s_user().string(jcl_class['val'])
+    #     mf = mf.movecursor(*jcl_user['xy']).s_juser()
+    #     # scroll
+    #     for i in range(0,jcl_param.get('scroll',0)):
+    #         mf = mf.movecursor(3,14).pf(8)
+    #     for jcl_param in jcl_param_list:
+    #         mf = mf.movecursor(*jcl_param['xy']).string(jcl_param['val'])
+    #     mf = mf.movecursor(*jcl_param['xy']).string(jcl_param['val'])
+    #     mf = mf.movecursor(3,14).s_sub().enter()
+    #     mf = mf.job_info().wait_job().xdc()
+    #     mf = mf.s_jclear().enter().enter().enter().pf(3).pf(3)
+    #     mf = mf.s_p2().enter().tab().s_data_transfer().enter()
+    #     mf = mf.s_res().enter().s_remove_hex().enter().pf(3).pf(3)
+    #     mf = mf.string("6").enter().transfer().pf(3).pf(3).pf(3)
+    #     mf = mf.string("2").enter().string("logoff").enter().sleep(5)
+    #     return "ALHAMDULILLAH"
