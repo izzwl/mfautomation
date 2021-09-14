@@ -24,7 +24,7 @@ args = parser.parse_args()
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
 # outlist name
-FILE        = os.path.join(OUTLIST_DIR,'LDB0104C')
+FILE        = os.path.join(OUTLIST_DIR,'LDB0104C-'+args.param.replace(' ','_'))
 
 # jcl mainframe name
 JCL         = "IMSVS.PROD.BMP.AUTO(LDB0104C)"
@@ -63,3 +63,23 @@ jcl_param   = { 'xy' : [20,8], 'val' : param, }
 args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
+
+# if runxls.lower() == 'y':
+os.chdir('..')
+os.chdir('export')
+# sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+_p = param[0:13].split(' ')
+_p_start = datetime.datetime.strptime(_p[0],"%y%m%d") 
+_p_end = datetime.datetime.strptime(_p[1],"%y%m%d") 
+_param = "{}-{}".format(
+    _p_start.strftime("%d%b%y"),
+    _p_end.strftime("%d%b%y"),
+)
+sys.argv = [
+    '',
+    '--input=LDB0104C-'+param.replace(' ','_'),
+    '--output=LDB0104C-'+param.replace(' ','_')+'.xls',
+    "--periode=%s"%_param
+]
+# sys.argv = [sys.argv[0]]
+execfile(__file__)

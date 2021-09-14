@@ -55,7 +55,7 @@ param       = "%s" % (args.param)
 #for movecursor to MPMCS99I section and set it
 jcl_class   = { 'xy' : [5,10], 'val' : 'p', }
 #for movecursor to user=MPMCS99 or notify=MPMCS99 section
-jcl_user    = { 'xy' : [7,26], }
+jcl_user    = { 'xy' : [7,24], }
 #for movecursor to jcl parameter section
 jcl_param   = { 'xy' : [20,8], 'val' : param, }
 # #run by passing these parameter

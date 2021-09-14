@@ -16,35 +16,25 @@ to run this script well, tso must meet the following condition:
 """
 parser = argparse.ArgumentParser()
 parser.add_argument('--mf', help='mf instance')
-parser.add_argument('--param', help='wip select')
+parser.add_argument('--param', help='TANPA INPUT')
 parser.add_argument('--output', help='output file name')
-parser.add_argument('--runxls', help='run macro xls [y]')
-
 args = parser.parse_args()
 
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
-_param = args.param.replace(' ','_')
-is_runxls = args.runxls and args.runxls.lower() == 'y'
 # outlist name
-# if is_runxls:
-#     FILE        = os.path.join(OUTLIST_DIR,'PPB1300D-'+_param)
-# else:
-#     FILE        = os.path.join(OUTLIST_DIR,'PPB1300D')
-FILE        = os.path.join(OUTLIST_DIR,'PPB1300D-'+_param)
+FILE        = os.path.join(OUTLIST_DIR,'MCR2800')
 
 # jcl mainframe name
-JCL         = "IMSVS.PROD.BMP(PPB1300D)"
+JCL         = "IMSVS.PROD.BMP(MCR2800)"
 
 # tso user, must be logged off
 TSO_USER    = "MPMCS99"
 
 # sub name of outlist on sd.h ex. JOBXXX>DETAIL
 # ex DETAIL = ['NON UMC']
-DETAIL      = ['RPTOUT',]
-
-runxls = args.runxls or ''
+DETAIL      = []
 
 # script instantiation
 print(TSO_USER)
@@ -65,19 +55,11 @@ param       = "%s" % (args.param)
 #for movecursor to MPMCS99I section and set it
 jcl_class   = { 'xy' : [5,10], 'val' : 'p', }
 #for movecursor to user=MPMCS99 or notify=MPMCS99 section
-jcl_user    = { 'xy' : [6,23], }
+jcl_user    = { 'xy' : [7,26], }
 #for movecursor to jcl parameter section
-jcl_param   = { 'xy' : [21,8], 'val' : param}
+jcl_param   = { 'xy' : [20,8], 'val' : param, }
 # #run by passing these parameter
 # mf = mf.handle(jcl_class, jcl_user, jcl_param, DETAIL)
 args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
-
-# if is_runxls:
-os.chdir('..')
-os.chdir('export')
-# sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
-sys.argv = ['','--input=PPB1300D-'+_param,'--output=PPB1300D-'+_param+'.xls']
-# sys.argv = [sys.argv[0]]
-execfile(__file__)

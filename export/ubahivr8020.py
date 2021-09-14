@@ -7,6 +7,7 @@ SRC = 'IVR8020'
 DST = 'IVR8020-NEW'
 print(sys.getrecursionlimit())
 sys.setrecursionlimit(90000)
+print(sys.getrecursionlimit())
 
 nf = open(os.path.join(MFOUTLIST_DIR,DST), "w+") 
 f = open(os.path.join(MFOUTLIST_DIR,SRC), "r")
