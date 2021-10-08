@@ -12,14 +12,18 @@ to run this script well, tso must meet the following condition:
 2. xdc default dataset to [tsouser].transfer
 
 ...continue
-
+/* INPUT-DATA:                       
+/* ----------                        
+/* NUYYYYYYY NUZZZZZZZ       
+/*                                   
+                                          
 """
 parser = argparse.ArgumentParser()
 parser.add_argument('--mf', help='mf instance')
-parser.add_argument('--param', help='R1900001 R2199999 X')
-parser.add_argument('--user', help='MPMCS99')
+parser.add_argument('--param', help='200101 210727')
+parser.add_argument('--user', help='user')
 parser.add_argument('--output', help='output file name')
-parser.add_argument('--runxls', help='run macro xls [y]')
+parser.add_argument('--runxls', help='runxls (y/n)')
 args = parser.parse_args()
 
 # default directory to keep outlist
@@ -28,12 +32,13 @@ _param = args.param.replace(' ','_')
 is_runxls = args.runxls and args.runxls.lower() == 'y'
 # outlist name
 if is_runxls:
-    FILE        = os.path.join(OUTLIST_DIR,'IVR7016-'+_param)
+    FILE        = os.path.join(OUTLIST_DIR,'IAP1400K-'+_param)
 else:
-    FILE        = os.path.join(OUTLIST_DIR,'IVR7016')
+    FILE        = os.path.join(OUTLIST_DIR,'IAP1400K')
+
 
 # jcl mainframe name
-JCL         = "IMSVS.PROD.BMP(IVR7016)"
+JCL         = "IMSVS.PROD.BMP(IAP1400)"
 
 # tso user, must be logged off
 TSO_USER    = args.user or "MPMCS99"
@@ -42,9 +47,10 @@ TSO_USER    = args.user or "MPMCS99"
 # ex DETAIL = ['NON UMC']
 DETAIL      = []
 
-runxls = args.runxls or ''
-
 # script instantiation
+print(TSO_USER)
+print(FILE)
+print(JCL)
 _mf_ibm     = X3270.X3270('mainframe','5000',TSO_USER,FILE,JCL)
 _mf_hrc     = X3270.X3270('hercules','6000',TSO_USER,FILE,JCL)
 # select to be used
@@ -53,29 +59,29 @@ try:
 except:    
     mf = _mf_ibm
 
-
 #calculate param for jcl
-# param       = "%s" % (args.param) if args.param else ''
 if args.param:
-    param       = "%s" % (args.param)
+    param       = "%s B" % (args.param)
 else:
     exit('param must be set')
 
+
 #for movecursor to MPMCS99I section and set it
-jcl_class   = { 'xy' : [5,10], 'val' : 'I', }
-#for movecursor to user=MPMCS99 section
+jcl_class   = { 'xy' : [5,10], 'val' : 'p', }
+#for movecursor to user=MPMCS99 or notify=MPMCS99 section
 jcl_user    = { 'xy' : [7,26], }
 #for movecursor to jcl parameter section
-jcl_param   = { 'xy' : [19,8], 'val' : param }
-
+jcl_param   = { 'xy' : [19,8], 'val' : param, }
 # #run by passing these parameter
 # mf = mf.handle(jcl_class, jcl_user, jcl_param, DETAIL)
 args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
 
-if runxls.lower() == 'y':
+if is_runxls:
     os.chdir('..')
     os.chdir('export')
-    sys.argv = ['','--input=IVR7016-'+_param,'--output=IVR7016-'+_param+'.xls']
+    # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+    sys.argv = ['','--input=IAP1400K-'+_param,'--output=IAP1400K-'+_param+'.xls']
+    # sys.argv = [sys.argv[0]]
     execfile(__file__)

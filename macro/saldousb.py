@@ -24,22 +24,27 @@ parser.add_argument('--mf', help='mf instance')
 parser.add_argument('--param', help='190829 [ALL 438175]')
 parser.add_argument('--output', help='output file name')
 args = parser.parse_args()
+if not args.param:
+    exit('param not set')
+
+_param = args.param.replace(' ','_')
 
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
 # outlist name
-FILE        = os.path.join(OUTLIST_DIR,'SALDOUSB')
+FILE        = os.path.join(OUTLIST_DIR,'SALDOUSB-'+_param)
 
 # jcl mainframe name
-JCL         = "IMSVS.PROD.BMP.AUTO(SALDOUSB)"
+JCL         = "IMSVS.PROD.BMP(SALDOUSB)"
 
 # tso user, must be logged off
 TSO_USER    = "MPMCS99"
 
 # sub name of outlist on sd.h ex. JOBXXX>DETAIL
 # ex DETAIL = ['NON UMC']
-DETAIL      = ['NONUMC']
+# DETAIL      = ['NONUMC']
+DETAIL      = []
 
 # script instantiation
 print(TSO_USER)
@@ -54,7 +59,7 @@ except:
     mf = _mf_ibm
 
 #calculate param for jcl
-param       = "%s" % (args.param) if args.param else datetime.datetime.now().strftime("%y%m%d")
+param       = "%s".ljust(13,' ') % (args.param)
 
 
 #for movecursor to MPMCS99I section and set it
@@ -68,3 +73,10 @@ jcl_param   = { 'xy' : [5,8], 'val' : param, 'scroll' : 1 }
 args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
+
+os.chdir('..')
+os.chdir('export')
+# sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+sys.argv = ['','--input=SALDOUSB-'+_param,'--output=SALDOUSB-'+_param+'.xls']
+# sys.argv = [sys.argv[0]]
+execfile(__file__)

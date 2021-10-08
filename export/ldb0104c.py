@@ -137,10 +137,11 @@ for k,v in org.items():
         'terpakai':0,
         'terpakai_wip':0,
     }
+    no = 1
     for i,org_code in enumerate(v):
         for d in export.data:
             if d[0] == org_code:
-                export.ws.write(row,0,str(i+1))
+                export.ws.write(row,0,str(no))
                 export.ws.write(row,1,d[0])
                 export.ws.write(row,2,d[1])
                 export.ws.write(row,3,d[8],export.num_style)
@@ -156,8 +157,10 @@ for k,v in org.items():
                 total_per_sbu['lembur'] += d[9]
                 total_per_sbu['terpakai'] += d[21]
                 total_per_sbu['terpakai_wip'] += d[24]
+                no += 1
+                row += 1
                 break
-        row += 1
+
     export.ws.write(row,2,'Sub Total',export.font_bold_style)
     export.ws.write(row,3,total_per_sbu['hr_kerja'],export.num_bold_style)
     export.ws.write(row,4,total_per_sbu['lembur'],export.num_bold_style)

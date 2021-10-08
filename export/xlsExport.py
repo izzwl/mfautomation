@@ -16,8 +16,9 @@ class xlsExport(object):
     text_col0 = []
     num_col0 = []
     int_col0 = []
+    num_col0_remove_zero = []
     date_format = [
-        "%d%b%y","%y%m%d","%d %b %y","%d%m%y"
+        "%d%b%y","%y%m%d","%Y-%m-%d","%d %b %y","%d%m%y"
     ]
     pivot_year = 1969
     panjang = {}
@@ -38,6 +39,7 @@ class xlsExport(object):
     end_line_regex_offset = 0
     data_regex = None
     raw_lines = []                
+    override_raw_lines = []                
     data = []
     def __init__(self,outlist,filename):
         self.outlist = os.path.join(self.MFOUTLIST_DIR,outlist)
@@ -99,7 +101,6 @@ class xlsExport(object):
         
         awal = self.firstlinedata or 0
         akhir = len(lines)
-
         if self.first_line_regex:
             for i,l in enumerate(lines):
                 x = re.search(self.first_line_regex,l)
@@ -113,7 +114,6 @@ class xlsExport(object):
                 if x:
                     akhir = i + self.end_line_regex_offset
                     break
-                   
         self.raw_lines = []                
         for i,l in enumerate(lines):
             if i > int(awal) and i < int(akhir) :
@@ -157,11 +157,16 @@ class xlsExport(object):
                             data = str(data)
                         if col in self.num_col0:
                             data = data.replace(',','')
-                            if data == '' :
-                                data = decimal.Decimal(0) 
+                            if data == '' and col in self.num_col0_remove_zero:
+                                data = '' 
+                            elif data == '':
+                                data = decimal.Decimal(0)
                             else:
                                 data = decimal.Decimal(data) 
-                            style = self.num_style
+                            if data == '' and col in self.num_col0_remove_zero:
+                                style = self.font_style
+                            else:
+                                style = self.num_style
                         if col in self.int_col0:
                             data = data.replace(',','')
                             if data == '' :
@@ -191,8 +196,10 @@ class xlsExport(object):
         # Sheet header, first row
         self.ws = self.wb.add_sheet('Sheet 1')
         self.write_header()
-        # if not self.raw_lines:
-        self.get_raw_lines()
+        if self.override_raw_lines:
+            self.raw_lines = self.override_raw_lines
+        else:
+            self.get_raw_lines()
         self.write_body()
         self.auto_width()
         return self.wb.save(os.path.join(self.MFXLS_DIR, self.filename))
@@ -201,7 +208,10 @@ class xlsExport(object):
         self.ws = self.wb.add_sheet(ws)
         self.write_header()
         # if not self.raw_lines:
-        self.get_raw_lines()
+        if self.override_raw_lines:
+            self.raw_lines = self.override_raw_lines
+        else:
+            self.get_raw_lines()
         self.write_body()
         self.auto_width()
 

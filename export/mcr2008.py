@@ -1,5 +1,5 @@
 import argparse
-import os,sys
+import os,sys,re
 sys.path.insert(0,'..')
 sys.path.insert(0,'.')
 from xlsExport import xlsExport
@@ -20,4 +20,13 @@ export.set_popotongan([1, 6, 12, 38, 45, 76, 83, 86, 107, 138, 146, 153, 161, 16
 export.set_date_col0([11,27,28,29,30,31,40,43])
 export.set_num_col0([])
 export.set_text_col0([])
+export.first_line_regex ="^0NO.  KDORG DESCRIPTION               NIK"
+export.get_raw_lines()
+raw_lines = export.raw_lines
+new_raw_lines = []
+for i,l in enumerate(raw_lines):
+    m = re.match(r'[0-9]{6}',l[38:44])
+    if ( m and m.span()[1]==len(l[38:44]) ):
+        new_raw_lines.append(l)
+export.override_raw_lines = new_raw_lines
 export.export()

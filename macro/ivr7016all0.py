@@ -16,7 +16,7 @@ to run this script well, tso must meet the following condition:
 """
 parser = argparse.ArgumentParser()
 parser.add_argument('--mf', help='mf instance')
-parser.add_argument('--param', help='R1900001 R2199999 X')
+parser.add_argument('--param', help='R1900001 R2199999')
 parser.add_argument('--user', help='MPMCS99')
 parser.add_argument('--output', help='output file name')
 parser.add_argument('--runxls', help='run macro xls [y]')
@@ -57,7 +57,7 @@ except:
 #calculate param for jcl
 # param       = "%s" % (args.param) if args.param else ''
 if args.param:
-    param       = "%s" % (args.param)
+    param       = "%s X" % (args.param)
 else:
     exit('param must be set')
 

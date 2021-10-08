@@ -16,24 +16,24 @@ to run this script well, tso must meet the following condition:
 """
 parser = argparse.ArgumentParser()
 parser.add_argument('--mf', help='mf instance')
-parser.add_argument('--param', help='R1900001 R2199999 X')
+parser.add_argument('--param', help='466774 3 1')
 parser.add_argument('--user', help='MPMCS99')
 parser.add_argument('--output', help='output file name')
-parser.add_argument('--runxls', help='run macro xls [y]')
+# parser.add_argument('--runxls', help='run macro xls [y]')
 args = parser.parse_args()
+
+if not args.param:
+    exit('param not set')
 
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
-_param = args.param.replace(' ','_')
-is_runxls = args.runxls and args.runxls.lower() == 'y'
+
 # outlist name
-if is_runxls:
-    FILE        = os.path.join(OUTLIST_DIR,'IVR7016-'+_param)
-else:
-    FILE        = os.path.join(OUTLIST_DIR,'IVR7016')
+_param = args.param.replace(' ','_')
+FILE        = os.path.join(OUTLIST_DIR,'IVR4025M-'+_param)
 
 # jcl mainframe name
-JCL         = "IMSVS.PROD.BMP(IVR7016)"
+JCL         = "IMSVS.PROD.BMP.AUTO(IVR4025M)"
 
 # tso user, must be logged off
 TSO_USER    = args.user or "MPMCS99"
@@ -42,7 +42,7 @@ TSO_USER    = args.user or "MPMCS99"
 # ex DETAIL = ['NON UMC']
 DETAIL      = []
 
-runxls = args.runxls or ''
+# runxls = args.runxls or ''
 
 # script instantiation
 _mf_ibm     = X3270.X3270('mainframe','5000',TSO_USER,FILE,JCL)
@@ -55,16 +55,13 @@ except:
 
 
 #calculate param for jcl
-# param       = "%s" % (args.param) if args.param else ''
-if args.param:
-    param       = "%s" % (args.param)
-else:
-    exit('param must be set')
+param       = "%s" % (args.param) if args.param else ''
+
 
 #for movecursor to MPMCS99I section and set it
 jcl_class   = { 'xy' : [5,10], 'val' : 'I', }
 #for movecursor to user=MPMCS99 section
-jcl_user    = { 'xy' : [7,26], }
+jcl_user    = { 'xy' : [6,57], }
 #for movecursor to jcl parameter section
 jcl_param   = { 'xy' : [19,8], 'val' : param }
 
@@ -74,8 +71,8 @@ args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
 
-if runxls.lower() == 'y':
-    os.chdir('..')
-    os.chdir('export')
-    sys.argv = ['','--input=IVR7016-'+_param,'--output=IVR7016-'+_param+'.xls']
-    execfile(__file__)
+os.chdir('..')
+os.chdir('export')
+# sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+sys.argv = [sys.argv[0],'--input=IVR4025M-'+_param,'--output=IVR4025M-'+_param+'.xls']
+execfile('ivr4025m.py')

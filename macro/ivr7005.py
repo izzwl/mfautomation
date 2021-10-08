@@ -16,27 +16,23 @@ to run this script well, tso must meet the following condition:
 """
 parser = argparse.ArgumentParser()
 parser.add_argument('--mf', help='mf instance')
-parser.add_argument('--param', help='R1900001 R2199999 X')
-parser.add_argument('--user', help='MPMCS99')
+parser.add_argument('--param', help='wip select')
+parser.add_argument('--user', help='MPMCS32')
 parser.add_argument('--output', help='output file name')
 parser.add_argument('--runxls', help='run macro xls [y]')
 args = parser.parse_args()
 
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
-_param = args.param.replace(' ','_')
-is_runxls = args.runxls and args.runxls.lower() == 'y'
+
 # outlist name
-if is_runxls:
-    FILE        = os.path.join(OUTLIST_DIR,'IVR7016-'+_param)
-else:
-    FILE        = os.path.join(OUTLIST_DIR,'IVR7016')
+FILE        = os.path.join(OUTLIST_DIR,'IVR7005')
 
 # jcl mainframe name
-JCL         = "IMSVS.PROD.BMP(IVR7016)"
+JCL         = "IMSVS.PROD.BMP.RUTIN(IVR7005)"
 
 # tso user, must be logged off
-TSO_USER    = args.user or "MPMCS99"
+TSO_USER    = args.user or "MPMCS32"
 
 # sub name of outlist on sd.h ex. JOBXXX>DETAIL
 # ex DETAIL = ['NON UMC']
@@ -55,11 +51,21 @@ except:
 
 
 #calculate param for jcl
-# param       = "%s" % (args.param) if args.param else ''
-if args.param:
-    param       = "%s" % (args.param)
+begin       = datetime.datetime.now()
+end         = datetime.datetime.now()
+_ed         = end.strftime("%-d")
+_ew         = end.strftime("%w")
+
+if _ew == '1':
+    begin = begin + datetime.timedelta(days=-3)
 else:
-    exit('param must be set')
+    begin = begin + datetime.timedelta(days=-1)
+# begin   = begin + datetime.timedelta(days=-8)
+end     = end
+
+_param       = "%s %s" % (begin.strftime("%y%m%d"),end.strftime("%y%m%d"))
+param       = "%s" % (args.param) if args.param else _param
+
 
 #for movecursor to MPMCS99I section and set it
 jcl_class   = { 'xy' : [5,10], 'val' : 'I', }
@@ -77,5 +83,6 @@ mf.handle()
 if runxls.lower() == 'y':
     os.chdir('..')
     os.chdir('export')
-    sys.argv = ['','--input=IVR7016-'+_param,'--output=IVR7016-'+_param+'.xls']
+    # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+    sys.argv = [sys.argv[0]]
     execfile(__file__)

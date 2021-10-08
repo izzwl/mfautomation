@@ -23,8 +23,9 @@ args = parser.parse_args()
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
+_param = args.param.replace(' ','_')
 # outlist name
-FILE        = os.path.join(OUTLIST_DIR,'LDB0103A')
+FILE        = os.path.join(OUTLIST_DIR,'LDB0103A-'+_param)
 
 # jcl mainframe name
 JCL         = "IMSVS.PROD.BMP.AUTO(LDB0103A)"
@@ -63,3 +64,15 @@ jcl_param   = { 'xy' : [23,8], 'val' : param }
 args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
+
+# if runxls.lower() == 'y':
+os.chdir('..')
+os.chdir('export')
+# sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+sys.argv = [
+    '',
+    '--input=LDB0103A-'+_param,
+    '--output=LDB0103A-'+_param+'.xls',
+]
+# sys.argv = [sys.argv[0]]
+execfile(__file__)

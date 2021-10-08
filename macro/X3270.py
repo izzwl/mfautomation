@@ -57,6 +57,15 @@ class X3270():
             return result
         except:
             return None
+    
+    def disconnect(self):
+        try:
+            subprocess.Popen("x3270if -t "+ str(self.port) +" 'disconnect()' ; wait",shell=True).wait()
+            print("%s Disconnect Success" % datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            return self
+        except Exception as e:
+            print("%s Disconnect Failed : %s" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),str(e)))
+            return sys.exit("GAGAL")
 
     def enter(self):
         try:
@@ -271,11 +280,11 @@ class X3270():
             return sys.exit(result[0])
 
     
-    def xdc(self):
+    def xdc(self,job_row_offset=0):
         detail = self.detail
         mf = self.enter().enter().pf(3).pf(3).pf(3).s_sdh().enter()
         row = self.get_sdh_row()
-        mf = mf.movecursor(row,1)
+        mf = mf.movecursor(row+job_row_offset,1)
         try:
             for d in detail:
                 print(d)
@@ -300,6 +309,7 @@ class X3270():
         jcl_user = self.jcl_user
         jcl_param = self.jcl_param
         jcl_param_list = self.jcl_param_list
+        job_row_offset = jcl_param.get('job_row_offset',0)
         detail = self.detail
         mf = self.cek_konek()
         mf = mf.s_tso().enter().sleep(5).string(self.tso_pass).enter().sleep(10).enter().enter().enter().cek_logon()
@@ -313,7 +323,7 @@ class X3270():
         for jp in jcl_param_list:
             mf = mf.movecursor(*jp['xy']).string(jp['val'])
         mf = mf.movecursor(3,14).s_sub().enter()
-        mf = mf.job_info().wait_job().xdc()
+        mf = mf.job_info().wait_job().xdc(job_row_offset)
         mf = mf.s_jclear().enter().enter().enter().pf(3).pf(3)
         
         if mf.has_xdc:
