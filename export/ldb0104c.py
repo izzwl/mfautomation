@@ -148,10 +148,10 @@ for k,v in org.items():
                 export.ws.write(row,4,d[9],export.num_style)
                 total_tersedia = d[8]+d[9]
                 export.ws.write(row,5,d[21],export.num_style)
-                persen_terpakai = (d[21]/total_tersedia)
+                persen_terpakai = (d[21]/total_tersedia) if d[21] else 0
                 export.ws.write(row,6,persen_terpakai,export.percentage_style)
                 export.ws.write(row,7,d[24],export.num_style)
-                persen_terpakai_wip = (d[24]/total_tersedia)
+                persen_terpakai_wip = (d[24]/total_tersedia) if d[24] else 0
                 export.ws.write(row,8,persen_terpakai_wip,export.percentage_style)
                 total_per_sbu['hr_kerja'] += d[8]
                 total_per_sbu['lembur'] += d[9]
@@ -181,10 +181,10 @@ export.ws.write(row,3,grand_total['hr_kerja'],export.num_bold_style)
 export.ws.write(row,4,grand_total['lembur'],export.num_bold_style)
 total_tersedia = grand_total['hr_kerja']+grand_total['lembur']
 export.ws.write(row,5,grand_total['terpakai'],export.num_bold_style)
-persen_terpakai = (grand_total['terpakai']/total_tersedia)
+persen_terpakai = (grand_total['terpakai']/total_tersedia) if grand_total['terpakai'] else 0
 export.ws.write(row,6,persen_terpakai,export.percentage_bold_style)
 export.ws.write(row,7,grand_total['terpakai_wip'],export.num_bold_style)
-persen_terpakai_wip = (grand_total['terpakai_wip']/total_tersedia)
+persen_terpakai_wip = (grand_total['terpakai_wip']/total_tersedia) if grand_total['terpakai_wip'] else 0
 export.ws.write(row,8,persen_terpakai_wip,export.percentage_bold_style)
 export.wb.active_sheet = 2
 export.ws.col(0).width = 256 * ( 1 + 5 )

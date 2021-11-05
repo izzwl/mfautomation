@@ -55,12 +55,16 @@ for i in ne.readlines():
 #     for d in date:
 #         mf.movecursor(2,11).string("d%s%s"%(e,d)).enter().sleep(5).enter()
 new_line = 'WIP'.ljust(6,' ')+' '+\
-        'MAT-IDR'.ljust(21,' ')+' '+\
-        'MAT-USD'.ljust(21,' ')+' '+\
-        'M/H-IDR'.ljust(21,' ')+' '+\
-        'M/H-USD'.ljust(21,' ')+' '+\
-        'OTH-IDR'.ljust(21,' ')+' '+\
-        'OTH-USD'.ljust(21,' ')+'\n'
+        'SERIAL'.ljust(20,' ')+' '+\
+        'CUST'.ljust(20,' ')+' '+\
+        'PG'.ljust(20,' ')+' '+\
+        'MAT-IDR'.ljust(20,' ')+' '+\
+        'MAT-USD'.ljust(20,' ')+' '+\
+        'M/H'.ljust(20,' ')+' '+\
+        'M/H-IDR'.ljust(20,' ')+' '+\
+        'M/H-USD'.ljust(20,' ')+' '+\
+        'OTH-IDR'.ljust(20,' ')+' '+\
+        'OTH-USD'.ljust(20,' ')+'\n'
 nf.write(new_line)
 
 for dt in wip:
@@ -71,6 +75,7 @@ for dt in wip:
     mh = {
         'idr':''.ljust(20,' '),
         'usd':''.ljust(20,' '),
+        'mh':''.ljust(20,' '),
     }
     mt = {
         'idr':''.ljust(20,' '),
@@ -82,18 +87,21 @@ for dt in wip:
     }
     for l in lines:
         if 'TOTAL-MAT:' in l:
-            mt['idr'] = l[15:36].ljust(20,' ').replace('*'," ")
-            mt['usd'] = l[43:64].ljust(20,' ').replace('*'," ")
+            mt['idr'] = l[15:36].strip().rjust(20,' ').replace('*'," ")
+            mt['usd'] = l[43:64].strip().rjust(20,' ').replace('*'," ")
         if 'TOTAL-M/H:' in l:
-            mh['idr'] = l[15:36].ljust(20,' ').replace('*'," ")
-            mh['usd'] = l[43:64].ljust(20,' ').replace('*'," ")
+            mh['idr'] = l[15:36].strip().rjust(20,' ').replace('*'," ")
+            mh['usd'] = l[43:64].strip().rjust(20,' ').replace('*'," ")
+            mh['mh'] = l[67:77].strip().rjust(20,' ').replace('*'," ")
         if 'TOTAL-OTH:' in l:
-            oth['idr'] = l[15:36].ljust(20,' ').replace('*'," ")
-            oth['usd'] = l[43:64].ljust(20,' ').replace('*'," ")
-
+            oth['idr'] = l[15:36].strip().rjust(20,' ').replace('*'," ")
+            oth['usd'] = l[43:64].strip().rjust(20,' ').replace('*'," ")
+        if 'WIP-NUMBR:' in l:
+            pass
     new_line = dt+' '+\
         mt['idr']+' '+\
         mt['usd']+' '+\
+        mh['mh']+' '+\
         mh['idr']+' '+\
         mh['usd']+' '+\
         oth['idr']+' '+\

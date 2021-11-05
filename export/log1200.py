@@ -9,19 +9,18 @@ parser.add_argument('--input', help='input file select - must be on ~/mfoutlist'
 parser.add_argument('--output', help='output file name ~/mfxls')
 args = parser.parse_args()
 
-outlist = args.input if args.input else 'AP08DATA'
-filename = args.output if args.output else 'AP08DATA.xls'
+outlist = args.input if args.input else 'LOG1200'
+filename = args.output if args.output else 'LOG1200.xls'
 
 export = xlsExport(outlist,filename)
 export.set_header([
-    'WIP','MAT-IDR','MAT-USD','M/H','M/H-IDR','M/H-USD','OTH-IDR','OTH-USD',
+    'TANGGAL','PART-NUMBER','LOKASI','QTY','UOM','EX-WIP','CUST',
+    'CUST-NAME','EX-PPCL#','UNIT-PRICE','CUR','COND','REMARK',
 ])
 export.set_firstlinedata(0)
 export.set_popotongan([
-    # 0,7,27,49,71,93,115,137
-    0,7,28,49,70,91,112,133,153,
+    1,10,31,42,51,56,65,69,95,119,134,138,145,165,
 ])
-export.set_date_col0([])
-export.set_int_col0([0])
-export.set_num_col0([1,2,3,4,5,6,7])
+export.set_date_col0([0])
+export.set_num_col0([3,9])
 export.export()
