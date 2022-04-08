@@ -16,8 +16,8 @@ to run this script well, tso must meet the following condition:
 """
 parser = argparse.ArgumentParser()
 parser.add_argument('--mf', help='mf instance')
-parser.add_argument('--param', help='PD2000001 PD2099999 A')
-parser.add_argument('--user', help='MPMCS32')
+parser.add_argument('--param', help='BM2000000 BM2199999')
+parser.add_argument('--user', help='MPMCS99')
 parser.add_argument('--output', help='output file name')
 parser.add_argument('--runxls', help='runxls (y/n)')
 args = parser.parse_args()
@@ -29,16 +29,16 @@ OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
 # outlist name
 if is_runxls:
-    FILE        = os.path.join(OUTLIST_DIR,'IAP1600-'+_param)
+    FILE        = os.path.join(OUTLIST_DIR,'IAP1700-'+_param)
 else:
-    FILE        = os.path.join(OUTLIST_DIR,'IAP1600')
+    FILE        = os.path.join(OUTLIST_DIR,'IAP1700')
 
 
 # jcl mainframe name
-JCL         = "IMSVS.PROD.BMP(IAP1600)"
+JCL         = "IMSVS.PROD.BMP(IAP1700)"
 
 # tso user, must be logged off
-TSO_USER    = args.user or "MPMCS32"
+TSO_USER    = args.user or "MPMCS99"
 
 # sub name of outlist on sd.h ex. JOBXXX>DETAIL
 # ex DETAIL = ['NON UMC']
@@ -59,9 +59,9 @@ param       = "%s" % (args.param) if args.param else ''
 
 
 #for movecursor to MPMCS99I section and set it
-jcl_class   = { 'xy' : [5,10], 'val' : 'A', }
+jcl_class   = { 'xy' : [5,10], 'val' : 'F', }
 #for movecursor to user=MPMCS99 section
-jcl_user    = { 'xy' : [7,26], }
+jcl_user    = { 'xy' : [6,60], }
 #for movecursor to jcl parameter section
 jcl_param   = { 'xy' : [18,8], 'val' : param }
 
@@ -74,6 +74,6 @@ if is_runxls:
     os.chdir('..')
     os.chdir('export')
     # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
-    sys.argv = ['','--input=IAP1600-'+_param,'--output=IAP1600-'+_param+'.xls']
+    sys.argv = ['','--input=IAP1700-'+_param,'--output=IAP1700-'+_param+'.xls']
     # sys.argv = [sys.argv[0]]
     execfile(__file__)

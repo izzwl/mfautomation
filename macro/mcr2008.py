@@ -49,7 +49,7 @@ except:
     mf = _mf_ibm
 
 #calculate param for jcl
-param       = "%s" % (args.param)
+param       = "%s" % (args.param) if args.param else ''
 
 
 #for movecursor to MPMCS99I section and set it
@@ -57,7 +57,7 @@ jcl_class   = { 'xy' : [5,10], 'val' : 'p', }
 #for movecursor to user=MPMCS99 or notify=MPMCS99 section
 jcl_user    = { 'xy' : [7,24], }
 #for movecursor to jcl parameter section
-jcl_param   = { 'xy' : [20,8], 'val' : param, }
+jcl_param   = { 'xy' : [18,8], 'val' : param, }
 # #run by passing these parameter
 # mf = mf.handle(jcl_class, jcl_user, jcl_param, DETAIL)
 args = [jcl_class, jcl_user, jcl_param, DETAIL]

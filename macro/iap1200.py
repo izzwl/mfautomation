@@ -23,13 +23,19 @@ parser.add_argument('--mf', help='mf instance')
 parser.add_argument('--param', help='NU1900001 NU2099999')
 parser.add_argument('--user', help='user')
 parser.add_argument('--output', help='output file name')
+parser.add_argument('--runxls', help='run macro xls [y]')
 args = parser.parse_args()
 
+_param = args.param.replace(' ','_')
+is_runxls = args.runxls and args.runxls.lower() == 'y'
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
 # outlist name
-FILE        = os.path.join(OUTLIST_DIR,'IAP1200')
+if is_runxls:
+    FILE        = os.path.join(OUTLIST_DIR,'IAP1200-'+_param)
+else:
+    FILE        = os.path.join(OUTLIST_DIR,'IAP1200')
 
 # jcl mainframe name
 JCL         = "IMSVS.PROD.BMP(IAP1200)"
@@ -71,3 +77,11 @@ jcl_param   = { 'xy' : [18,8], 'val' : param, }
 args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
+
+if is_runxls:
+    os.chdir('..')
+    os.chdir('export')
+    # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+    sys.argv = ['','--input=IAP1200-'+_param,'--output=IAP1200-'+_param+'.xls']
+    # sys.argv = [sys.argv[0]]
+    execfile(__file__)

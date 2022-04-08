@@ -16,33 +16,35 @@ to run this script well, tso must meet the following condition:
 """
 parser = argparse.ArgumentParser()
 parser.add_argument('--mf', help='mf instance')
-parser.add_argument('--param', help='PD2000001 PD2099999 A')
-parser.add_argument('--user', help='MPMCS32')
+parser.add_argument('--param', help='210101 120131')
+# parser.add_argument('--user', help='MPMCS32')
 parser.add_argument('--output', help='output file name')
-parser.add_argument('--runxls', help='runxls (y/n)')
+parser.add_argument('--runxls', help='run macro xls [y]')
 args = parser.parse_args()
 
-_param = args.param.replace(' ','_')
-is_runxls = args.runxls and args.runxls.lower() == 'y'
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
+_param = args.param.replace(' ','_')
+is_runxls = args.runxls and args.runxls.lower() == 'y'
 # outlist name
 if is_runxls:
-    FILE        = os.path.join(OUTLIST_DIR,'IAP1600-'+_param)
+    FILE        = os.path.join(OUTLIST_DIR,'GAJI-KEKJK-'+_param)
 else:
-    FILE        = os.path.join(OUTLIST_DIR,'IAP1600')
-
+    FILE        = os.path.join(OUTLIST_DIR,'GAJI-KEKJK')
 
 # jcl mainframe name
-JCL         = "IMSVS.PROD.BMP(IAP1600)"
+JCL         = "IMSVS.PROD.BMP(GAJI)"
 
 # tso user, must be logged off
-TSO_USER    = args.user or "MPMCS32"
+# TSO_USER    = args.user or "MPMCS99"
+TSO_USER    = "MPMCS99"
 
 # sub name of outlist on sd.h ex. JOBXXX>DETAIL
 # ex DETAIL = ['NON UMC']
-DETAIL      = []
+DETAIL      = ['POTJK']
+
+runxls = args.runxls or ''
 
 # script instantiation
 _mf_ibm     = X3270.X3270('mainframe','5000',TSO_USER,FILE,JCL)
@@ -59,21 +61,29 @@ param       = "%s" % (args.param) if args.param else ''
 
 
 #for movecursor to MPMCS99I section and set it
-jcl_class   = { 'xy' : [5,10], 'val' : 'A', }
+jcl_class   = { 'xy' : [5,10], 'val' : 'L', }
 #for movecursor to user=MPMCS99 section
 jcl_user    = { 'xy' : [7,26], }
 #for movecursor to jcl parameter section
-jcl_param   = { 'xy' : [18,8], 'val' : param }
+jcl_param   = { 'xy' : [8,8], 'val' : param, 'scroll':1 }
 
 # #run by passing these parameter
 # mf = mf.handle(jcl_class, jcl_user, jcl_param, DETAIL)
 args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
+
+# if runxls.lower() == 'y':
+#     os.chdir('..')
+#     os.chdir('export')
+#     # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+#     sys.argv = [sys.argv[0]]
+#     execfile(__file__)
+
 if is_runxls:
     os.chdir('..')
     os.chdir('export')
     # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
-    sys.argv = ['','--input=IAP1600-'+_param,'--output=IAP1600-'+_param+'.xls']
+    sys.argv = ['','--input=GAJI-KEKJK-'+_param,'--output=GAJI-KEKJK-'+_param+'.xls']
     # sys.argv = [sys.argv[0]]
     execfile(__file__)

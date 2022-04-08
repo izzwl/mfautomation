@@ -17,6 +17,7 @@ to run this script well, tso must meet the following condition:
 parser = argparse.ArgumentParser()
 parser.add_argument('--mf', help='mf instance')
 parser.add_argument('--param', help='444555')
+parser.add_argument('--cutoff', help='211231')
 # parser.add_argument('--user', help='MPMCS32')
 parser.add_argument('--output', help='output file name')
 parser.add_argument('--runxls', help='run macro xls [y]')
@@ -62,8 +63,10 @@ jcl_user    = { 'xy' : [6,23], }
 #for movecursor to jcl parameter section
 jcl_param   = { 'xy' : [18,8], 'val' : param, 'scroll' : 1 }
 
+param_cutoff = args.cutoff if args.cutoff else datetime.datetime.now().strftime("%y%m%d")
+
 jcl_param_list   = [
-    { 'xy' : [14,8], 'val' : datetime.datetime.now().strftime("%y%m%d") },
+    { 'xy' : [14,8], 'val' : param_cutoff },
     { 'xy' : [18,8], 'val' : param },
 ]
 

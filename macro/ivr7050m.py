@@ -50,9 +50,11 @@ end         = datetime.datetime.now()
 #     begin = begin + datetime.timedelta(days=-1)
 begin   = begin + datetime.timedelta(days=-8)
 end     = end + datetime.timedelta(days=-1)
-
 param       = "%s %s" % (begin.strftime("%y%m%d"),end.strftime("%y%m%d"))
-
+try:
+    param = sys.argv[2] #"210101 210131"
+except:
+    pass
 #for movecursor to MPMCS99I section and set it
 jcl_class   = { 'xy' : [5,10], 'val' : 'I', }
 #for movecursor to user=MPMCS99 section

@@ -18,7 +18,7 @@ mf_param = args.mf or 'ibm'
 MFOUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
 DEPT = [
-    'A1100 A1110 A1120 A6410 A6430      ',
+    'A1100 A1110 A1120 A6710 A6410 A6430',
     'U3110 U3120 U3130 U3140 U3150 U3160',
     'U3410 U3420 U3430 U3440 U3800 U3810',
 ]

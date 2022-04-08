@@ -18,7 +18,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--mf', help='mf instance')
 parser.add_argument('--param', help='200403 200408')
 parser.add_argument('--output', help='output file name')
+parser.add_argument('--runxls', help='y')
 args = parser.parse_args()
+runxls = args.runxls or 'y'
 
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
@@ -65,14 +67,14 @@ args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
 
-# if runxls.lower() == 'y':
-os.chdir('..')
-os.chdir('export')
-# sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
-sys.argv = [
-    '',
-    '--input=LDB0103G-'+_param,
-    '--output=LDB0103G-'+_param+'.xls',
-]
-# sys.argv = [sys.argv[0]]
-execfile(__file__)
+if runxls.lower() == 'y':
+    os.chdir('..')
+    os.chdir('export')
+    # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+    sys.argv = [
+        '',
+        '--input=LDB0103G-'+_param,
+        '--output=LDB0103G-'+_param+'.xls',
+    ]
+    # sys.argv = [sys.argv[0]]
+    execfile(__file__)

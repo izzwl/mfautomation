@@ -16,7 +16,7 @@ to run this script well, tso must meet the following condition:
 """
 parser = argparse.ArgumentParser()
 parser.add_argument('--mf', help='mf instance')
-parser.add_argument('--param', help='wip select')
+parser.add_argument('--param', help='"1..ALL     220201 220228"')
 parser.add_argument('--user', help='MPMCS32')
 parser.add_argument('--output', help='output file name')
 args = parser.parse_args()
