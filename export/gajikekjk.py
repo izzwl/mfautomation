@@ -9,19 +9,17 @@ parser.add_argument('--input', help='input file select - must be on ~/mfoutlist'
 parser.add_argument('--output', help='output file name ~/mfxls')
 args = parser.parse_args()
 
-outlist = args.input if args.input else 'IAP1500'
-filename = args.output if args.output else 'IAP1500.xls'
+outlist = args.input if args.input else 'GAJI-KEKJK'
+filename = args.output if args.output else 'GAJI-KEKJK.xls'
 
 export = xlsExport(outlist,filename)
 export.set_header([
-    'SNDI','NAMA-SANDI','JENIS','F-SENTRAL','ANGGARAN-AWAL',
-    'REALISASI-ANGGARAN','SUB','PLAFOND-BUDGET','PLAFOND-PR',
-    'REALISASI-PR','PLAFOND-PO','REALISASI-PO','ANGGARAN-AKHIR',
+    'K-ORG','NIK','NAMA','JAM-KERJA','ISTIRAHAT','JML-MENIT'
 ])
-export.set_firstlinedata(3)
+export.set_firstlinedata(0)
 export.set_popotongan([
-    1,6,36,49,60,81,105,110,134,158,182,206,230,254,
+    1,7,14,44,50,62,74
 ])
 export.set_date_col0([])
-export.set_num_col0([4,5,7,8,9,10,11,12])
+export.set_int_col0([3,4,5])
 export.export()

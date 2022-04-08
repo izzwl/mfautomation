@@ -16,7 +16,7 @@ export = xlsExport(outlist,filename)
 export.set_header([
     'WIP#','CREATE','S','PG','JOB','CUST','OPENED','CLOSED','VOUCHER#','CREATED','SANDI','NIK/VEND','NAMA','MTU','NILAI','NILAI(RPH)','NILAI(USD)','PAYMENT#','REF-VCHR','URAIAN'
 ])
-export.set_firstlinedata(4)
+export.set_firstlinedata(1)
 export.set_popotongan([
     1,8,15,17,20,24,29,37,45,55,63,69,78,104,108,125,144,163,175,185,300,
 ])

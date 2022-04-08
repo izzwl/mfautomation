@@ -16,6 +16,7 @@ class xlsExport(object):
     text_col0 = []
     num_col0 = []
     int_col0 = []
+    int_wocomma_col0 = {'col':[],'comma_idx':0}
     num_col0_remove_zero = []
     date_format = [
         "%d%b%y","%y%m%d","%Y-%m-%d","%d %b %y","%d%m%y"
@@ -167,12 +168,27 @@ class xlsExport(object):
                                 style = self.font_style
                             else:
                                 style = self.num_style
+                        if col in self.int_wocomma_col0['col']:
+                            idx = self.int_wocomma_col0['comma_idx']
+                            data = data.replace(',','')
+                            try:
+                                data = data[:(len(data)+idx)]+"."+data[idx:]
+                                data = decimal.Decimal(data)
+                                style = self.num_style
+                            except:
+                                style = self.font_style
+                                
                         if col in self.int_col0:
                             data = data.replace(',','')
                             if data == '' :
                                 data = int(0) 
                             else:
                                 data = int(data) 
+                        
+                                
+                             
+
+
                     except Exception as e:
                         print(e)
                     cobalagi = 0

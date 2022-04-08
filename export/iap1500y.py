@@ -1,5 +1,5 @@
 import argparse
-import os
+import os,sys
 sys.path.insert(0,'..')
 sys.path.insert(0,'.')
 from xlsExport import xlsExport
@@ -18,7 +18,7 @@ export.set_header([
     'REALISASI-ANGGARAN','PLAFOND-BUDGET','PLAFOND-PR','REALISASI-PR',
     'PLAFOND-PO','REALISASI-PO','ANGGARAN-AKHIR',
 ])
-export.set_firstlinedata(0)
+export.set_firstlinedata(3)
 export.set_popotongan([
     1,6,33,45,55,61,85,108,131,155,179,203,227,251,
 ])
