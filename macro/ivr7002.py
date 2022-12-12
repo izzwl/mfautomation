@@ -20,7 +20,10 @@ parser.add_argument('--param', help='wip select')
 parser.add_argument('--user', help='MPMCS32')
 parser.add_argument('--output', help='output file name')
 parser.add_argument('--runxls', help='run macro xls [y]')
+parser.add_argument('--isrowbawah', help='[y/n]')
+
 args = parser.parse_args()
+isrowbawah = True if args.isrowbawah == 'y' else False
 
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
@@ -41,8 +44,8 @@ DETAIL      = []
 runxls = args.runxls or ''
 
 # script instantiation
-_mf_ibm     = X3270.X3270('mainframe','5000',TSO_USER,FILE,JCL)
-_mf_hrc     = X3270.X3270('hercules','6000',TSO_USER,FILE,JCL)
+_mf_ibm     = X3270.X3270('mainframe','5000',TSO_USER,FILE,JCL,is_row_bawah=isrowbawah)
+_mf_hrc     = X3270.X3270('hercules','6000',TSO_USER,FILE,JCL,is_row_bawah=isrowbawah)
 # select to be used
 try: 
     mf = { 'ibm':_mf_ibm,'hrc':_mf_hrc }.get( args.mf, _mf_ibm )

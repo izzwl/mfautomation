@@ -19,10 +19,11 @@ class X3270():
     detail = ''
     scroll = 0
     has_xdc = True
-
-    def __init__(self,host,port,tso_user='',filename=None,jcl=None):
+    is_row_bawah = False
+    def __init__(self,host,port,tso_user='',filename=None,jcl=None,is_row_bawah=False):
         self.host = host
         self.port = str(port)
+        self.is_row_bawah = is_row_bawah
         self.tso_user = tso_user
         self.filename = filename
         self.jcl = jcl
@@ -115,7 +116,7 @@ class X3270():
     def transfer_kosong(self,filename=None):
         filename = filename or self.filename
         try:
-            subprocess.Popen("x3270if -t "+ str(self.port) +" \"transfer(hostfile=kosong.transfer,localfile="+filename+",exist=replace)\" ; wait",shell=True).wait()
+            subprocess.Popen("x3270if -t "+ str(self.port) +" \"transfer(hostfile=kosong.transfer,localfile="+filename+",exist=replace,buffersize=4096)\" ; wait",shell=True).wait()
             print("%s Transfer %s Success" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),str(filename)))
             return self
         except Exception as e:
@@ -125,7 +126,7 @@ class X3270():
     def transfer(self,filename=None):
         filename = filename or self.filename
         try:
-            subprocess.Popen("x3270if -t "+ str(self.port) +" \"transfer(hostfile="+ self.tso_user +".transfer,localfile="+filename+",exist=replace)\" ; wait",shell=True).wait()
+            subprocess.Popen("x3270if -t "+ str(self.port) +" \"transfer(hostfile="+ self.tso_user +".transfer,localfile="+filename+",exist=replace,buffersize=4096)\" ; wait",shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT).communicate()
             print("%s Transfer %s Success" % (datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),str(filename)))
             return self
         except Exception as e:
@@ -241,6 +242,15 @@ class X3270():
                 if r.isdigit():
                     row_list.append(int(r)-1)
             
+            #hot fix di hrc kebalik row sdh nya
+            if int(self.port) == 6000:
+                pass
+                if len(row_list) > 1 and self.is_row_bawah:
+                    self._result = row_list[row]
+                else:
+                    self._result = row_list[row-1]
+            else:
+                self._result = row_list[row-1]
             self._result = row_list[row-1]
             print (row_list)
             print (row_list[row-1])

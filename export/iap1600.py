@@ -13,6 +13,7 @@ outlist = args.input if args.input else 'IAP1600'
 filename = args.output if args.output else 'IAP1600.xls'
 
 export = xlsExport(outlist,filename)
+export.sort_fields = [0]
 export.set_header([
     'SPJ#','L-R#','CREATED','PRINTED','CREATED-BY','S','J','BEBAN',
     'PG','WOM#','STATUS','S','DATE-7','CUST','SANDI','ONWING',
@@ -25,7 +26,7 @@ export.set_header([
     'NIL-SUSULAN','NILAI-VOUCHER','UM/BYR','NILAI-PJK','NO-BM',
     'TGL-BM',
 ])
-export.set_firstlinedata(1)
+export.set_firstlinedata(5)
 export.set_popotongan([
     1,11,16,24,32,42,45,47,54,57,64,80,82,90,95,101,108,118,125,
     133,164,215,222,248,254,256,262,266,282,284,286,289,292,295,316,

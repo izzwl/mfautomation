@@ -16,16 +16,23 @@ to run this script well, tso must meet the following condition:
 """
 parser = argparse.ArgumentParser()
 parser.add_argument('--mf', help='mf instance')
-parser.add_argument('--param', help='"1..ALL     220201 220228"')
+parser.add_argument('--param', help='"1..ALL_____220201 220228" replace _ with space')
 parser.add_argument('--user', help='MPMCS32')
 parser.add_argument('--output', help='output file name')
+parser.add_argument('--runxls', help='run macro xls [y]')
+
 args = parser.parse_args()
+runxls = args.runxls or ''
 
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
-
+_param = args.param.replace(' ','_')
+is_runxls = args.runxls and args.runxls.lower() == 'y'
 # outlist name
-FILE        = os.path.join(OUTLIST_DIR,'TMWO04A')
+if is_runxls:
+    FILE        = os.path.join(OUTLIST_DIR,'TMWO04A-'+_param)
+else:
+    FILE        = os.path.join(OUTLIST_DIR,'TMWO04A')
 
 # jcl mainframe name
 JCL         = "IMSVS.PROD.BMP(TMWO04A)"
@@ -63,3 +70,10 @@ jcl_param   = { 'xy' : [19,8], 'val' : param }
 args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
+
+if runxls.lower() == 'y':
+    os.chdir('..')
+    os.chdir('export')
+    # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+    sys.argv = ['','--input=TMWO04A-'+_param,'--output=TMWO04A-'+_param+'.xls']
+    execfile(__file__)

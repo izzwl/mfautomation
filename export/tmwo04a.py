@@ -16,12 +16,13 @@ export = xlsExport(outlist,filename)
 export.set_header([
     'WIPNO','TOP','TYPE-NO','PART-NUMBER','TYPE-DESCRIPTION','ALTRN','DC',
     'AQTY','OWN','CHRGE#','OPEN','CLOSE','S','NHAWIP','SERIAL-NO','MAN-HOUR',
+    'REJECTION-REASON','OPON','OPOFF',
 ])
 export.set_firstlinedata(0)
 export.set_popotongan([
-    1,8,12,23,40,58,65,68,73,77,84,92,100,102,109,125,
+    1,8,12,23,40,58,65,68,73,77,84,92,100,102,109,125,133,187,199,206,
 ])
-export.set_date_col0([10,11])
+export.set_date_col0([10,11,17,18])
 export.set_num_col0([15])
 
 export.get_raw_lines()

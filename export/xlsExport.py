@@ -3,6 +3,7 @@ import os
 import xlwt
 import decimal
 import re
+from operator import itemgetter
 
 class xlsExport(object):
     MFOUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
@@ -21,6 +22,7 @@ class xlsExport(object):
     date_format = [
         "%d%b%y","%y%m%d","%Y-%m-%d","%d %b %y","%d%m%y"
     ]
+    sort_fields = []
     pivot_year = 1969
     panjang = {}
     wb = xlwt.Workbook(encoding='utf-8',style_compression=2)
@@ -208,6 +210,10 @@ class xlsExport(object):
             self.data.append(d) 
             row += 1
 
+    def sort_by(self):
+        if self.sort_fields:
+            self.raw_lines = sorted(self.raw_lines,key=itemgetter(*self.sort_fields))
+
     def export(self):
         # Sheet header, first row
         self.ws = self.wb.add_sheet('Sheet 1')
@@ -216,9 +222,17 @@ class xlsExport(object):
             self.raw_lines = self.override_raw_lines
         else:
             self.get_raw_lines()
+        self.sort_by()
         self.write_body()
         self.auto_width()
         return self.wb.save(os.path.join(self.MFXLS_DIR, self.filename))
+
+    
+    def export_data(self):
+        if self.override_raw_lines:
+            self.raw_lines = self.override_raw_lines
+        else:
+            self.get_raw_lines()
 
     def export_ws(self,ws):
         self.ws = self.wb.add_sheet(ws)
@@ -228,6 +242,7 @@ class xlsExport(object):
             self.raw_lines = self.override_raw_lines
         else:
             self.get_raw_lines()
+        self.sort_by()
         self.write_body()
         self.auto_width()
 

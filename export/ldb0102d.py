@@ -1,5 +1,5 @@
 import argparse
-import os,sys
+import os,sys,re
 sys.path.insert(0,'..')
 sys.path.insert(0,'.')
 from xlsExport import xlsExport
@@ -22,4 +22,12 @@ export.set_popotongan([
 ])
 export.set_date_col0([])
 export.set_num_col0([5,6,7])
+export.get_raw_lines()
+raw_lines = export.raw_lines
+new_raw_lines = []
+for i,l in enumerate(raw_lines):
+    m = re.match(r'[0-9]{6}',l[8:14])
+    if ( m and m.span()[1]==len(l[8:14]) ):
+        new_raw_lines.append(l)
+export.override_raw_lines = new_raw_lines
 export.export()

@@ -38,9 +38,9 @@ else:
 
 if now.strftime('%w') == '1':
     try:
-	ivr7020h = IVR7020H.handle()
+        ivr7020h = IVR7020H.handle()
     except:
-	ivr7020h = 'SUBHANALLAH'
+        ivr7020h = 'SUBHANALLAH'
 else:
     ivr7020h = 'BELUM'
 

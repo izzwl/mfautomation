@@ -18,7 +18,7 @@ export.set_header([
 ])
 export.set_firstlinedata(0)
 export.set_popotongan([
-    1,6,16,23,39,47,57,66,76,80,87,93,100,106,124,144,153,161
+    1,6,16,23,39,47,57,66,76,80,87,93,100,106,124,143,152,161
 ])
 export.set_date_col0([4,6,9,16])
 export.set_num_col0([10,11,13])

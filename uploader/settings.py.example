@@ -1,0 +1,3 @@
+import os
+API_URL = 'https://portal.umcntp.co.id/apintp/apiapi/bcdata/'
+MFOUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')

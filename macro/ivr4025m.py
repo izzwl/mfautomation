@@ -20,7 +20,11 @@ parser.add_argument('--param', help='wip select')
 parser.add_argument('--user', help='MPMCS32')
 parser.add_argument('--output', help='output file name')
 parser.add_argument('--runxls', help='run macro xls [y]')
+parser.add_argument('--sendmail', help='kirim email')
+parser.add_argument('--isrowbawah', help='[y/n]')
+
 args = parser.parse_args()
+isrowbawah = True if args.isrowbawah == 'y' else False
 
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
@@ -39,10 +43,11 @@ TSO_USER    = args.user or "MPMCS32"
 DETAIL      = []
 
 runxls = args.runxls or ''
+sendmail = args.sendmail or ''
 
 # script instantiation
-_mf_ibm     = X3270.X3270('mainframe','5000',TSO_USER,FILE,JCL)
-_mf_hrc     = X3270.X3270('hercules','6000',TSO_USER,FILE,JCL)
+_mf_ibm     = X3270.X3270('mainframe','5000',TSO_USER,FILE,JCL,is_row_bawah=isrowbawah)
+_mf_hrc     = X3270.X3270('hercules','6000',TSO_USER,FILE,JCL,is_row_bawah=isrowbawah)
 # select to be used
 try: 
     mf = { 'ibm':_mf_ibm,'hrc':_mf_hrc }.get( args.mf, _mf_ibm )
@@ -52,6 +57,13 @@ except:
 
 #calculate param for jcl
 param       = "%s" % (args.param) if args.param else ''
+
+end         = datetime.datetime.now()
+
+output_filename = ""
+if not args.param:
+    output_filename = "%s - IVR4025M.xls" % (end.strftime("%Y.%m.%d"))
+
 
 
 #for movecursor to MPMCS99I section and set it
@@ -71,5 +83,15 @@ if runxls.lower() == 'y':
     os.chdir('..')
     os.chdir('export')
     # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
-    sys.argv = [sys.argv[0]]
+    if output_filename:
+        sys.argv = [sys.argv[0],'--output=%s'%(output_filename)]
+    else:
+        sys.argv = [sys.argv[0]]
     execfile(__file__)
+
+if sendmail.lower() == 'y':
+    os.chdir('..')
+    os.chdir('kirim')
+    # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+    sys.argv = [sys.argv[0],'--filename=%s'%(output_filename)]
+    execfile("rutin_ivr4025m.py")

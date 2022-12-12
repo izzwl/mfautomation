@@ -166,10 +166,10 @@ for k,v in org.items():
     export.ws.write(row,4,total_per_sbu['lembur'],export.num_bold_style)
     total_tersedia = total_per_sbu['hr_kerja']+total_per_sbu['lembur']
     export.ws.write(row,5,total_per_sbu['terpakai'],export.num_bold_style)
-    persen_terpakai = (total_per_sbu['terpakai']/total_tersedia)
+    persen_terpakai = (total_per_sbu['terpakai']/total_tersedia) if total_tersedia else 0
     export.ws.write(row,6,persen_terpakai,export.percentage_bold_style)
     export.ws.write(row,7,total_per_sbu['terpakai_wip'],export.num_bold_style)
-    persen_terpakai_wip = (total_per_sbu['terpakai_wip']/total_tersedia)
+    persen_terpakai_wip = (total_per_sbu['terpakai_wip']/total_tersedia) if total_tersedia else 0
     export.ws.write(row,8,persen_terpakai_wip,export.percentage_bold_style)
     grand_total['hr_kerja'] += total_per_sbu['hr_kerja']
     grand_total['lembur'] += total_per_sbu['lembur']

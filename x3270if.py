@@ -4,10 +4,10 @@ import subprocess,sys
 def conv_date(date):
     command = "date -d "+date+" +%Y-%m-%d"
     if date:
-	try:
+        try:
             return subprocess.Popen(command,shell=True,stdout=subprocess.PIPE).communicate()[0].strip()
         except:
-    	    return ''
+            return ''
     else:
         return ''
 

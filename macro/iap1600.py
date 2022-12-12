@@ -20,10 +20,13 @@ parser.add_argument('--param', help='PD2000001 PD2099999 A')
 parser.add_argument('--user', help='MPMCS32')
 parser.add_argument('--output', help='output file name')
 parser.add_argument('--runxls', help='runxls (y/n)')
+parser.add_argument('--sendmail', help='kirim email')
 args = parser.parse_args()
 
 _param = args.param.replace(' ','_')
 is_runxls = args.runxls and args.runxls.lower() == 'y'
+sendmail = args.sendmail or ''
+
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
@@ -56,6 +59,13 @@ except:
 
 #calculate param for jcl
 param       = "%s" % (args.param) if args.param else ''
+end         = datetime.datetime.now()
+
+output_filename = ""
+if not args.param:
+    output_filename = "%s - IAP1600.xls" % (end.strftime("%Y.%m.%d"),)
+else:
+    output_filename = "%s - IAP1600-%s.xls" % (end.strftime("%Y.%m.%d"),_param)
 
 
 #for movecursor to MPMCS99I section and set it
@@ -70,10 +80,21 @@ jcl_param   = { 'xy' : [18,8], 'val' : param }
 args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
+
 if is_runxls:
     os.chdir('..')
     os.chdir('export')
     # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
-    sys.argv = ['','--input=IAP1600-'+_param,'--output=IAP1600-'+_param+'.xls']
     # sys.argv = [sys.argv[0]]
+    if output_filename:
+        sys.argv = [sys.argv[0],'--input=IAP1600-'+_param,'--output=%s'%(output_filename)]
+    else:
+        sys.argv = ['','--input=IAP1600-'+_param,'--output=IAP1600-'+_param+'.xls']
     execfile(__file__)
+
+if sendmail.lower() == 'y':
+    os.chdir('..')
+    os.chdir('kirim')
+    # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+    sys.argv = [sys.argv[0],'--filename=%s'%(output_filename)]
+    execfile("rutin_iap1600.py")

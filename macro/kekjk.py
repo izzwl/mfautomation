@@ -40,7 +40,7 @@ for m in macro:
     ]
     files.append(filename)
     sys.argv = _args
-    # ldbexec = execfile('./'+m+'.py')
+    ldbexec = execfile('./'+m+'.py')
     ldbexec = None
 
 

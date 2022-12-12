@@ -61,7 +61,7 @@ except:
 
 #calculate param for jcl
 if args.param:
-    param       = "%s B" % (args.param)
+    param       = "%s K" % (args.param)
 else:
     exit('param must be set')
 

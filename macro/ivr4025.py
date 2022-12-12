@@ -17,7 +17,7 @@ to run this script well, tso must meet the following condition:
 parser = argparse.ArgumentParser()
 parser.add_argument('--mf', help='mf instance')
 parser.add_argument('--param', help='455455')
-# parser.add_argument('--user', help='MPMCS32')
+parser.add_argument('--user', help='MPMCS32')
 parser.add_argument('--output', help='output file name')
 parser.add_argument('--runxls', help='run macro xls [y]')
 args = parser.parse_args()
@@ -37,8 +37,8 @@ else:
 JCL         = "IMSVS.PROD.BMP(IVR4025)"
 
 # tso user, must be logged off
-# TSO_USER    = args.user or "MPMCS99"
-TSO_USER    = "MPMCS99"
+TSO_USER    = args.user or "MPMCS99"
+# TSO_USER    = "MPMCS99"
 
 # sub name of outlist on sd.h ex. JOBXXX>DETAIL
 # ex DETAIL = ['NON UMC']

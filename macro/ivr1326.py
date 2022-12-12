@@ -35,7 +35,7 @@ else:
 
 
 # jcl mainframe name
-JCL         = "IMSVS.PROD.BMP(IVR1326)"
+JCL         = "IMSVS.PROD.BMP.AUTO(IVR1326)"
 
 # tso user, must be logged off
 TSO_USER    = args.user or "MPMCS32"

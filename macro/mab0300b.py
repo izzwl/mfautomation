@@ -21,11 +21,14 @@ parser.add_argument('--user', help='MPMCS32')
 parser.add_argument('--output', help='output file name')
 args = parser.parse_args()
 
+if not args.param:
+    exit('param not set')
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
 # outlist name
-FILE        = os.path.join(OUTLIST_DIR,'MAB0300B')
+_param = args.param.replace(' ','_')
+FILE        = os.path.join(OUTLIST_DIR,'MAB0300B-'+_param)
 
 # jcl mainframe name
 JCL         = "IMSVS.PROD.BMP(MAB0300B)"
@@ -63,3 +66,9 @@ jcl_param   = { 'xy' : [12,8], 'val' : param }
 args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
+
+
+os.chdir('..')
+os.chdir('export')
+sys.argv = ['','--input=MAB0300B-'+_param,'--output=MAB0300B-'+_param+'.xls']
+execfile(__file__)

@@ -19,13 +19,22 @@ parser.add_argument('--mf', help='mf instance')
 parser.add_argument('--param', help='201001 201031 I I')
 parser.add_argument('--user', help='MPMCS32')
 parser.add_argument('--output', help='output file name')
+parser.add_argument('--runxls', help='runxls y/n')
 args = parser.parse_args()
+
+runxls = args.runxls or ''
 
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
 # outlist name
 FILE        = os.path.join(OUTLIST_DIR,'VRP1200')
+_param = args.param.replace(' ','_')
+is_runxls = args.runxls and args.runxls.lower() == 'y'
+if is_runxls:
+    FILE        = os.path.join(OUTLIST_DIR,'VRP1200-'+_param)
+else:
+    FILE        = os.path.join(OUTLIST_DIR,'VRP1200')
 
 # jcl mainframe name
 JCL         = "IMSVS.PROD.BMP(VRP1200)"
@@ -63,3 +72,10 @@ jcl_param   = { 'xy' : [20,8], 'val' : param }
 args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
+
+if runxls.lower() == 'y':
+    os.chdir('..')
+    os.chdir('export')
+    # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+    sys.argv = ['','--input=VRP1200-'+_param,'--output=VRP1200-'+_param+'.xls']
+    execfile(__file__)

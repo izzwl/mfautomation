@@ -19,13 +19,23 @@ parser.add_argument('--mf', help='mf instance')
 parser.add_argument('--param', help='201001 201031')
 parser.add_argument('--user', help='MPMCS32')
 parser.add_argument('--output', help='output file name')
+parser.add_argument('--runxls', help='y')
+
 args = parser.parse_args()
+runxls = args.runxls or 'n'
 
 # default directory to keep outlist
 OUTLIST_DIR = os.path.join(os.path.expanduser("~"),'mfoutlist')
 
+_param = args.param.replace(' ','_')
 # outlist name
-FILE        = os.path.join(OUTLIST_DIR,args.output or 'LDB0103M')
+if args.output:
+    FILE        = os.path.join(OUTLIST_DIR,args.output)
+elif runxls.lower() == 'y' :
+    FILE        = os.path.join(OUTLIST_DIR,'LDB0103M-'+_param)
+else:
+    FILE        = os.path.join(OUTLIST_DIR,'LDB0103M')
+
 
 # jcl mainframe name
 JCL         = "IMSVS.PROD.BMP(LDB0103M)"
@@ -63,3 +73,20 @@ jcl_param   = { 'xy' : [22,8], 'val' : param }
 args = [jcl_class, jcl_user, jcl_param, DETAIL]
 mf.set_param(*args)
 mf.handle()
+
+if runxls.lower() == 'y':
+    if args.output :
+        _fileinput = args.output
+    else:
+        _fileinput = 'LDB0103M-'+_param
+
+    os.chdir('..')
+    os.chdir('export')
+    # sys.argv = [sys.argv[0],'--input='+FILE,'--output='+FILE]
+    sys.argv = [
+        '',
+        '--input='+_fileinput,
+        '--output=LDB0103M-'+_param+'.xls',
+    ]
+    # sys.argv = [sys.argv[0]]
+    execfile(__file__)
